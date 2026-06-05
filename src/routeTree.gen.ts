@@ -9,38 +9,233 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppFishermenIndexRouteImport } from './routes/_app/fishermen.index'
+import { Route as AppCatchesIndexRouteImport } from './routes/_app/catches.index'
+import { Route as AppBoatsIndexRouteImport } from './routes/_app/boats.index'
+import { Route as AppFishermenNewRouteImport } from './routes/_app/fishermen.new'
+import { Route as AppCatchesNewRouteImport } from './routes/_app/catches.new'
+import { Route as AppBoatsNewRouteImport } from './routes/_app/boats.new'
+import { Route as AppFishermenIdIndexRouteImport } from './routes/_app/fishermen.$id.index'
+import { Route as AppCatchesIdIndexRouteImport } from './routes/_app/catches.$id.index'
+import { Route as AppBoatsIdIndexRouteImport } from './routes/_app/boats.$id.index'
+import { Route as AppFishermenIdEditRouteImport } from './routes/_app/fishermen.$id.edit'
+import { Route as AppCatchesIdEditRouteImport } from './routes/_app/catches.$id.edit'
+import { Route as AppBoatsIdEditRouteImport } from './routes/_app/boats.$id.edit'
 
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFishermenIndexRoute = AppFishermenIndexRouteImport.update({
+  id: '/fishermen/',
+  path: '/fishermen/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCatchesIndexRoute = AppCatchesIndexRouteImport.update({
+  id: '/catches/',
+  path: '/catches/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBoatsIndexRoute = AppBoatsIndexRouteImport.update({
+  id: '/boats/',
+  path: '/boats/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFishermenNewRoute = AppFishermenNewRouteImport.update({
+  id: '/fishermen/new',
+  path: '/fishermen/new',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCatchesNewRoute = AppCatchesNewRouteImport.update({
+  id: '/catches/new',
+  path: '/catches/new',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBoatsNewRoute = AppBoatsNewRouteImport.update({
+  id: '/boats/new',
+  path: '/boats/new',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFishermenIdIndexRoute = AppFishermenIdIndexRouteImport.update({
+  id: '/fishermen/$id/',
+  path: '/fishermen/$id/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCatchesIdIndexRoute = AppCatchesIdIndexRouteImport.update({
+  id: '/catches/$id/',
+  path: '/catches/$id/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBoatsIdIndexRoute = AppBoatsIdIndexRouteImport.update({
+  id: '/boats/$id/',
+  path: '/boats/$id/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFishermenIdEditRoute = AppFishermenIdEditRouteImport.update({
+  id: '/fishermen/$id/edit',
+  path: '/fishermen/$id/edit',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCatchesIdEditRoute = AppCatchesIdEditRouteImport.update({
+  id: '/catches/$id/edit',
+  path: '/catches/$id/edit',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBoatsIdEditRoute = AppBoatsIdEditRouteImport.update({
+  id: '/boats/$id/edit',
+  path: '/boats/$id/edit',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/boats/new': typeof AppBoatsNewRoute
+  '/catches/new': typeof AppCatchesNewRoute
+  '/fishermen/new': typeof AppFishermenNewRoute
+  '/boats/': typeof AppBoatsIndexRoute
+  '/catches/': typeof AppCatchesIndexRoute
+  '/fishermen/': typeof AppFishermenIndexRoute
+  '/boats/$id/edit': typeof AppBoatsIdEditRoute
+  '/catches/$id/edit': typeof AppCatchesIdEditRoute
+  '/fishermen/$id/edit': typeof AppFishermenIdEditRoute
+  '/boats/$id/': typeof AppBoatsIdIndexRoute
+  '/catches/$id/': typeof AppCatchesIdIndexRoute
+  '/fishermen/$id/': typeof AppFishermenIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/boats/new': typeof AppBoatsNewRoute
+  '/catches/new': typeof AppCatchesNewRoute
+  '/fishermen/new': typeof AppFishermenNewRoute
+  '/boats': typeof AppBoatsIndexRoute
+  '/catches': typeof AppCatchesIndexRoute
+  '/fishermen': typeof AppFishermenIndexRoute
+  '/boats/$id/edit': typeof AppBoatsIdEditRoute
+  '/catches/$id/edit': typeof AppCatchesIdEditRoute
+  '/fishermen/$id/edit': typeof AppFishermenIdEditRoute
+  '/boats/$id': typeof AppBoatsIdIndexRoute
+  '/catches/$id': typeof AppCatchesIdIndexRoute
+  '/fishermen/$id': typeof AppFishermenIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/login': typeof LoginRoute
+  '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/boats/new': typeof AppBoatsNewRoute
+  '/_app/catches/new': typeof AppCatchesNewRoute
+  '/_app/fishermen/new': typeof AppFishermenNewRoute
+  '/_app/boats/': typeof AppBoatsIndexRoute
+  '/_app/catches/': typeof AppCatchesIndexRoute
+  '/_app/fishermen/': typeof AppFishermenIndexRoute
+  '/_app/boats/$id/edit': typeof AppBoatsIdEditRoute
+  '/_app/catches/$id/edit': typeof AppCatchesIdEditRoute
+  '/_app/fishermen/$id/edit': typeof AppFishermenIdEditRoute
+  '/_app/boats/$id/': typeof AppBoatsIdIndexRoute
+  '/_app/catches/$id/': typeof AppCatchesIdIndexRoute
+  '/_app/fishermen/$id/': typeof AppFishermenIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/dashboard'
+    | '/boats/new'
+    | '/catches/new'
+    | '/fishermen/new'
+    | '/boats/'
+    | '/catches/'
+    | '/fishermen/'
+    | '/boats/$id/edit'
+    | '/catches/$id/edit'
+    | '/fishermen/$id/edit'
+    | '/boats/$id/'
+    | '/catches/$id/'
+    | '/fishermen/$id/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/login'
+    | '/dashboard'
+    | '/boats/new'
+    | '/catches/new'
+    | '/fishermen/new'
+    | '/boats'
+    | '/catches'
+    | '/fishermen'
+    | '/boats/$id/edit'
+    | '/catches/$id/edit'
+    | '/fishermen/$id/edit'
+    | '/boats/$id'
+    | '/catches/$id'
+    | '/fishermen/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/_app'
+    | '/login'
+    | '/_app/dashboard'
+    | '/_app/boats/new'
+    | '/_app/catches/new'
+    | '/_app/fishermen/new'
+    | '/_app/boats/'
+    | '/_app/catches/'
+    | '/_app/fishermen/'
+    | '/_app/boats/$id/edit'
+    | '/_app/catches/$id/edit'
+    | '/_app/fishermen/$id/edit'
+    | '/_app/boats/$id/'
+    | '/_app/catches/$id/'
+    | '/_app/fishermen/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  LoginRoute: typeof LoginRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +243,139 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/dashboard': {
+      id: '/_app/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/fishermen/': {
+      id: '/_app/fishermen/'
+      path: '/fishermen'
+      fullPath: '/fishermen/'
+      preLoaderRoute: typeof AppFishermenIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/catches/': {
+      id: '/_app/catches/'
+      path: '/catches'
+      fullPath: '/catches/'
+      preLoaderRoute: typeof AppCatchesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/boats/': {
+      id: '/_app/boats/'
+      path: '/boats'
+      fullPath: '/boats/'
+      preLoaderRoute: typeof AppBoatsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/fishermen/new': {
+      id: '/_app/fishermen/new'
+      path: '/fishermen/new'
+      fullPath: '/fishermen/new'
+      preLoaderRoute: typeof AppFishermenNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/catches/new': {
+      id: '/_app/catches/new'
+      path: '/catches/new'
+      fullPath: '/catches/new'
+      preLoaderRoute: typeof AppCatchesNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/boats/new': {
+      id: '/_app/boats/new'
+      path: '/boats/new'
+      fullPath: '/boats/new'
+      preLoaderRoute: typeof AppBoatsNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/fishermen/$id/': {
+      id: '/_app/fishermen/$id/'
+      path: '/fishermen/$id'
+      fullPath: '/fishermen/$id/'
+      preLoaderRoute: typeof AppFishermenIdIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/catches/$id/': {
+      id: '/_app/catches/$id/'
+      path: '/catches/$id'
+      fullPath: '/catches/$id/'
+      preLoaderRoute: typeof AppCatchesIdIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/boats/$id/': {
+      id: '/_app/boats/$id/'
+      path: '/boats/$id'
+      fullPath: '/boats/$id/'
+      preLoaderRoute: typeof AppBoatsIdIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/fishermen/$id/edit': {
+      id: '/_app/fishermen/$id/edit'
+      path: '/fishermen/$id/edit'
+      fullPath: '/fishermen/$id/edit'
+      preLoaderRoute: typeof AppFishermenIdEditRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/catches/$id/edit': {
+      id: '/_app/catches/$id/edit'
+      path: '/catches/$id/edit'
+      fullPath: '/catches/$id/edit'
+      preLoaderRoute: typeof AppCatchesIdEditRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/boats/$id/edit': {
+      id: '/_app/boats/$id/edit'
+      path: '/boats/$id/edit'
+      fullPath: '/boats/$id/edit'
+      preLoaderRoute: typeof AppBoatsIdEditRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppBoatsNewRoute: typeof AppBoatsNewRoute
+  AppCatchesNewRoute: typeof AppCatchesNewRoute
+  AppFishermenNewRoute: typeof AppFishermenNewRoute
+  AppBoatsIndexRoute: typeof AppBoatsIndexRoute
+  AppCatchesIndexRoute: typeof AppCatchesIndexRoute
+  AppFishermenIndexRoute: typeof AppFishermenIndexRoute
+  AppBoatsIdEditRoute: typeof AppBoatsIdEditRoute
+  AppCatchesIdEditRoute: typeof AppCatchesIdEditRoute
+  AppFishermenIdEditRoute: typeof AppFishermenIdEditRoute
+  AppBoatsIdIndexRoute: typeof AppBoatsIdIndexRoute
+  AppCatchesIdIndexRoute: typeof AppCatchesIdIndexRoute
+  AppFishermenIdIndexRoute: typeof AppFishermenIdIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppDashboardRoute: AppDashboardRoute,
+  AppBoatsNewRoute: AppBoatsNewRoute,
+  AppCatchesNewRoute: AppCatchesNewRoute,
+  AppFishermenNewRoute: AppFishermenNewRoute,
+  AppBoatsIndexRoute: AppBoatsIndexRoute,
+  AppCatchesIndexRoute: AppCatchesIndexRoute,
+  AppFishermenIndexRoute: AppFishermenIndexRoute,
+  AppBoatsIdEditRoute: AppBoatsIdEditRoute,
+  AppCatchesIdEditRoute: AppCatchesIdEditRoute,
+  AppFishermenIdEditRoute: AppFishermenIdEditRoute,
+  AppBoatsIdIndexRoute: AppBoatsIdIndexRoute,
+  AppCatchesIdIndexRoute: AppCatchesIdIndexRoute,
+  AppFishermenIdIndexRoute: AppFishermenIdIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
