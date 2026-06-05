@@ -31,7 +31,7 @@ function FishermanDetails() {
         <Card className="md:col-span-1">
           <CardContent className="flex flex-col items-center gap-3 p-6">
             <div className="grid h-24 w-24 place-items-center rounded-full gradient-ocean text-2xl font-bold text-white shadow-glow">
-              {data?.fullName?.split(" ").map((p) => p[0]).slice(0, 2).join("") ?? "—"}
+              {data?.fullName?.split(" ").map((p: string) => p[0]).slice(0, 2).join("") ?? "—"}
             </div>
             <p className="text-lg font-semibold">{isLoading ? "…" : data?.fullName}</p>
             <Badge tone={data?.status === "active" ? "success" : "muted"}>{data?.status ?? "—"}</Badge>
