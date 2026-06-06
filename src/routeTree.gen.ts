@@ -12,7 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppStockRouteImport } from './routes/_app/stock'
+import { Route as AppSettingsRouteImport } from './routes/_app/settings'
+import { Route as AppSalesRouteImport } from './routes/_app/sales'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppAnalyticsRouteImport } from './routes/_app/analytics'
+import { Route as AppAiRouteImport } from './routes/_app/ai'
 import { Route as AppFishermenIndexRouteImport } from './routes/_app/fishermen.index'
 import { Route as AppCatchesIndexRouteImport } from './routes/_app/catches.index'
 import { Route as AppBoatsIndexRouteImport } from './routes/_app/boats.index'
@@ -40,9 +45,34 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppStockRoute = AppStockRouteImport.update({
+  id: '/stock',
+  path: '/stock',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSalesRoute = AppSalesRouteImport.update({
+  id: '/sales',
+  path: '/sales',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAiRoute = AppAiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
   getParentRoute: () => AppRoute,
 } as any)
 const AppFishermenIndexRoute = AppFishermenIndexRouteImport.update({
@@ -109,7 +139,12 @@ const AppBoatsIdEditRoute = AppBoatsIdEditRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/ai': typeof AppAiRoute
+  '/analytics': typeof AppAnalyticsRoute
   '/dashboard': typeof AppDashboardRoute
+  '/sales': typeof AppSalesRoute
+  '/settings': typeof AppSettingsRoute
+  '/stock': typeof AppStockRoute
   '/boats/new': typeof AppBoatsNewRoute
   '/catches/new': typeof AppCatchesNewRoute
   '/fishermen/new': typeof AppFishermenNewRoute
@@ -126,7 +161,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/ai': typeof AppAiRoute
+  '/analytics': typeof AppAnalyticsRoute
   '/dashboard': typeof AppDashboardRoute
+  '/sales': typeof AppSalesRoute
+  '/settings': typeof AppSettingsRoute
+  '/stock': typeof AppStockRoute
   '/boats/new': typeof AppBoatsNewRoute
   '/catches/new': typeof AppCatchesNewRoute
   '/fishermen/new': typeof AppFishermenNewRoute
@@ -145,7 +185,12 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
+  '/_app/ai': typeof AppAiRoute
+  '/_app/analytics': typeof AppAnalyticsRoute
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/sales': typeof AppSalesRoute
+  '/_app/settings': typeof AppSettingsRoute
+  '/_app/stock': typeof AppStockRoute
   '/_app/boats/new': typeof AppBoatsNewRoute
   '/_app/catches/new': typeof AppCatchesNewRoute
   '/_app/fishermen/new': typeof AppFishermenNewRoute
@@ -164,7 +209,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/ai'
+    | '/analytics'
     | '/dashboard'
+    | '/sales'
+    | '/settings'
+    | '/stock'
     | '/boats/new'
     | '/catches/new'
     | '/fishermen/new'
@@ -181,7 +231,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
+    | '/ai'
+    | '/analytics'
     | '/dashboard'
+    | '/sales'
+    | '/settings'
+    | '/stock'
     | '/boats/new'
     | '/catches/new'
     | '/fishermen/new'
@@ -199,7 +254,12 @@ export interface FileRouteTypes {
     | '/'
     | '/_app'
     | '/login'
+    | '/_app/ai'
+    | '/_app/analytics'
     | '/_app/dashboard'
+    | '/_app/sales'
+    | '/_app/settings'
+    | '/_app/stock'
     | '/_app/boats/new'
     | '/_app/catches/new'
     | '/_app/fishermen/new'
@@ -243,11 +303,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/stock': {
+      id: '/_app/stock'
+      path: '/stock'
+      fullPath: '/stock'
+      preLoaderRoute: typeof AppStockRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/sales': {
+      id: '/_app/sales'
+      path: '/sales'
+      fullPath: '/sales'
+      preLoaderRoute: typeof AppSalesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/analytics': {
+      id: '/_app/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AppAnalyticsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/ai': {
+      id: '/_app/ai'
+      path: '/ai'
+      fullPath: '/ai'
+      preLoaderRoute: typeof AppAiRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/fishermen/': {
@@ -338,7 +433,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppAiRoute: typeof AppAiRoute
+  AppAnalyticsRoute: typeof AppAnalyticsRoute
   AppDashboardRoute: typeof AppDashboardRoute
+  AppSalesRoute: typeof AppSalesRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppStockRoute: typeof AppStockRoute
   AppBoatsNewRoute: typeof AppBoatsNewRoute
   AppCatchesNewRoute: typeof AppCatchesNewRoute
   AppFishermenNewRoute: typeof AppFishermenNewRoute
@@ -354,7 +454,12 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAiRoute: AppAiRoute,
+  AppAnalyticsRoute: AppAnalyticsRoute,
   AppDashboardRoute: AppDashboardRoute,
+  AppSalesRoute: AppSalesRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppStockRoute: AppStockRoute,
   AppBoatsNewRoute: AppBoatsNewRoute,
   AppCatchesNewRoute: AppCatchesNewRoute,
   AppFishermenNewRoute: AppFishermenNewRoute,
