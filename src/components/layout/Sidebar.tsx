@@ -11,11 +11,11 @@ const items = [
   { to: "/fishermen", label: "Pêcheurs", icon: FiUsers },
   { to: "/boats", label: "Bateaux", icon: FiAnchor },
   { to: "/catches", label: "Captures", icon: FiActivity },
-  { to: "/stock", label: "Stocks", icon: FiBox, soon: true },
-  { to: "/sales", label: "Ventes", icon: FiShoppingCart, soon: true },
-  { to: "/analytics", label: "Analytics", icon: FiBarChart2, soon: true },
-  { to: "/ai", label: "SmartFish AI", icon: FiCpu, soon: true },
-  { to: "/settings", label: "Paramètres", icon: FiSettings, soon: true },
+  { to: "/stock", label: "Stocks", icon: FiBox },
+  { to: "/sales", label: "Ventes", icon: FiShoppingCart },
+  { to: "/analytics", label: "Analytics", icon: FiBarChart2 },
+  { to: "/ai", label: "SmartFish AI", icon: FiCpu },
+  { to: "/settings", label: "Paramètres", icon: FiSettings },
 ];
 
 export function Sidebar({ open }: { open: boolean }) {
@@ -47,13 +47,11 @@ export function Sidebar({ open }: { open: boolean }) {
             <Link
               key={item.to}
               to={item.to as any}
-              disabled={item.soon}
               className={cn(
                 "group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
                 active
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
                   : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
-                item.soon && "opacity-50 pointer-events-none",
               )}
             >
               {active && (
@@ -64,11 +62,6 @@ export function Sidebar({ open }: { open: boolean }) {
               )}
               <Icon className="h-5 w-5 shrink-0" />
               {open && <span className="truncate">{item.label}</span>}
-              {open && item.soon && (
-                <span className="ml-auto rounded-full bg-sidebar-accent px-2 py-0.5 text-[10px] uppercase tracking-wider text-sidebar-foreground/70">
-                  Soon
-                </span>
-              )}
             </Link>
           );
         })}
