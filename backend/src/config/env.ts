@@ -17,4 +17,8 @@ export const env = {
     accessExpires: process.env.JWT_ACCESS_EXPIRES ?? "15m",
     refreshExpires: process.env.JWT_REFRESH_EXPIRES ?? "7d",
   },
+  gemini: {
+    apiKey: process.env.GEMINI_API_KEY ?? "",
+    model: process.env.GEMINI_MODEL ?? "gemini-1.5-flash",
+  },
 };
