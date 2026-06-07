@@ -9,6 +9,9 @@ import { Badge } from "@/components/common/Badge";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { AreaTrend } from "@/components/charts/AreaTrend";
 import { forecastDemand } from "@/lib/mock/operations";
+import { aiService } from "@/lib/services/ai.service";
+
+
 
 export const Route = createFileRoute("/_app/ai")({
   ssr: false,
@@ -35,19 +38,30 @@ function AiPage() {
     { role: "ai", content: "Bonjour ! Je suis SmartFish AI, votre copilote décisionnel. Posez-moi une question sur vos stocks, ventes, captures ou prévisions." },
   ]);
   const [input, setInput] = useState("");
+  const [pending, setPending] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
 
-  const send = () => {
+  const send = async () => {
     const text = input.trim();
-    if (!text) return;
+    if (!text || pending) return;
     setMessages((m) => [...m, { role: "user", content: text }]);
     setInput("");
-    setTimeout(() => {
+    setPending(true);
+    try {
+      const history = messages.slice(-8).map((m) => ({
+        role: (m.role === "ai" ? "model" : "user") as "user" | "model",
+        content: m.content,
+      }));
+      const { reply } = await aiService.chat(text, history);
+      setMessages((m) => [...m, { role: "ai", content: reply }]);
+    } catch {
       const key = text.toLowerCase().includes("stock") ? "stock" : text.toLowerCase().includes("vente") ? "ventes" : "default";
       setMessages((m) => [...m, { role: "ai", content: AI_RESPONSES[key] }]);
-    }, 700);
+    } finally {
+      setPending(false);
+    }
   };
 
   return (

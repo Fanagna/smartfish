@@ -17,6 +17,7 @@ import { Route as AppStockRouteImport } from './routes/_app/stock'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppSalesRouteImport } from './routes/_app/sales'
 import { Route as AppPurchasesRouteImport } from './routes/_app/purchases'
+import { Route as AppMapRouteImport } from './routes/_app/map'
 import { Route as AppFleetRouteImport } from './routes/_app/fleet'
 import { Route as AppExportsRouteImport } from './routes/_app/exports'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
@@ -72,6 +73,11 @@ const AppSalesRoute = AppSalesRouteImport.update({
 const AppPurchasesRoute = AppPurchasesRouteImport.update({
   id: '/purchases',
   path: '/purchases',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMapRoute = AppMapRouteImport.update({
+  id: '/map',
+  path: '/map',
   getParentRoute: () => AppRoute,
 } as any)
 const AppFleetRoute = AppFleetRouteImport.update({
@@ -168,6 +174,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AppDashboardRoute
   '/exports': typeof AppExportsRoute
   '/fleet': typeof AppFleetRoute
+  '/map': typeof AppMapRoute
   '/purchases': typeof AppPurchasesRoute
   '/sales': typeof AppSalesRoute
   '/settings': typeof AppSettingsRoute
@@ -194,6 +201,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AppDashboardRoute
   '/exports': typeof AppExportsRoute
   '/fleet': typeof AppFleetRoute
+  '/map': typeof AppMapRoute
   '/purchases': typeof AppPurchasesRoute
   '/sales': typeof AppSalesRoute
   '/settings': typeof AppSettingsRoute
@@ -222,6 +230,7 @@ export interface FileRoutesById {
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/exports': typeof AppExportsRoute
   '/_app/fleet': typeof AppFleetRoute
+  '/_app/map': typeof AppMapRoute
   '/_app/purchases': typeof AppPurchasesRoute
   '/_app/sales': typeof AppSalesRoute
   '/_app/settings': typeof AppSettingsRoute
@@ -250,6 +259,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/exports'
     | '/fleet'
+    | '/map'
     | '/purchases'
     | '/sales'
     | '/settings'
@@ -276,6 +286,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/exports'
     | '/fleet'
+    | '/map'
     | '/purchases'
     | '/sales'
     | '/settings'
@@ -303,6 +314,7 @@ export interface FileRouteTypes {
     | '/_app/dashboard'
     | '/_app/exports'
     | '/_app/fleet'
+    | '/_app/map'
     | '/_app/purchases'
     | '/_app/sales'
     | '/_app/settings'
@@ -384,6 +396,13 @@ declare module '@tanstack/react-router' {
       path: '/purchases'
       fullPath: '/purchases'
       preLoaderRoute: typeof AppPurchasesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/map': {
+      id: '/_app/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof AppMapRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/fleet': {
@@ -514,6 +533,7 @@ interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppExportsRoute: typeof AppExportsRoute
   AppFleetRoute: typeof AppFleetRoute
+  AppMapRoute: typeof AppMapRoute
   AppPurchasesRoute: typeof AppPurchasesRoute
   AppSalesRoute: typeof AppSalesRoute
   AppSettingsRoute: typeof AppSettingsRoute
@@ -539,6 +559,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppExportsRoute: AppExportsRoute,
   AppFleetRoute: AppFleetRoute,
+  AppMapRoute: AppMapRoute,
   AppPurchasesRoute: AppPurchasesRoute,
   AppSalesRoute: AppSalesRoute,
   AppSettingsRoute: AppSettingsRoute,
