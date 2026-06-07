@@ -4,14 +4,29 @@ import { prisma } from "../../lib/prisma";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { validate } from "../../middleware/validate";
 import { requireAuth } from "../../middleware/auth";
+import { geminiGenerate, geminiJson } from "../../lib/gemini";
 
 export const aiRouter = Router();
 aiRouter.use(requireAuth);
 
-/**
- * Lightweight predictive endpoints. Uses naive moving-average on historical
- * catches/sales as a placeholder for a real ML pipeline.
- */
+const SYSTEM = `Tu es SmartFish Decision AI, copilote décisionnel d'une société halieutique (SOGEDIPROMA, Madagascar).
+Réponds en français, sois concis, factuel, orienté business halieutique (pêche, flotte, stock, ventes, export).
+Lorsque tu reçois des données chiffrées, base tes recommandations dessus.`;
+
+async function snapshot() {
+  const [stockCount, lowStock, salesAgg, recentCatches] = await Promise.all([
+    prisma.stockItem.count(),
+    prisma.stockItem.findMany({ take: 20 }),
+    prisma.sale.aggregate({ _sum: { amount: true }, _count: true, where: { status: "paid" } }),
+    prisma.catch.findMany({ take: 20, orderBy: { date: "desc" } }),
+  ]);
+  return {
+    stock: { total: stockCount, lowStock: lowStock.filter((s) => s.quantityKg <= s.thresholdKg).map((s) => ({ name: s.name, qty: s.quantityKg, threshold: s.thresholdKg })) },
+    sales: { paid: salesAgg._count, revenue: salesAgg._sum.amount ?? 0 },
+    captures: recentCatches.map((c) => ({ fish: c.fishType, kg: c.weightKg, zone: c.zone, date: c.date })),
+  };
+}
+
 aiRouter.get("/forecast", asyncHandler(async (_req, res) => {
   const sales = await prisma.$queryRaw<Array<{ d: Date; total: number }>>`
     SELECT date_trunc('day', "issuedAt") AS d, COALESCE(SUM(amount), 0)::float AS total
@@ -29,43 +44,34 @@ aiRouter.get("/forecast", asyncHandler(async (_req, res) => {
 }));
 
 aiRouter.get("/recommendations", asyncHandler(async (_req, res) => {
-  const lowStock = await prisma.stockItem.findMany({
-    where: { quantityKg: { lte: prisma.stockItem.fields.thresholdKg } },
-    take: 5,
-  });
-  const recs: Array<{ id: string; title: string; impact: string; confidence: number }> = [];
-  lowStock.forEach((s, i) =>
-    recs.push({
-      id: `restock-${s.id}`,
-      title: `Réapprovisionner ${s.name} (entrepôt ${s.warehouse ?? "—"})`,
-      impact: "Évite rupture sous 5 jours",
-      confidence: 0.85 - i * 0.05,
-    }),
+  const snap = await snapshot();
+  const data = await geminiJson<{ recommendations: Array<{ title: string; impact: string; confidence: number; tone?: string }> }>(
+    `Voici l'état actuel de l'entreprise (JSON) :\n${JSON.stringify(snap)}\n\nProduis 4 recommandations stratégiques au format JSON :
+{"recommendations":[{"title":"...","impact":"...","confidence":0.0-1.0,"tone":"success|warning|info|danger"}]}`,
+    { system: SYSTEM, temperature: 0.6 },
   );
-  recs.push({
-    id: "channel-mix",
-    title: "Augmenter de 12% les ventes export sur le segment thon",
-    impact: "+8% marge brute projetée",
-    confidence: 0.78,
-  });
-  res.json(recs);
+  res.json(data.recommendations ?? data);
 }));
 
-const chatSchema = z.object({ message: z.string().min(1).max(2000) });
+const chatSchema = z.object({
+  message: z.string().min(1).max(2000),
+  history: z.array(z.object({ role: z.enum(["user", "model"]), content: z.string() })).max(20).optional(),
+});
 
 aiRouter.post("/chat", validate(chatSchema), asyncHandler(async (req, res) => {
-  const msg = (req.body.message as string).toLowerCase();
-  let reply = "Je suis l'assistant SmartFish. Pose-moi une question sur tes stocks, ventes ou captures.";
-  if (msg.includes("stock")) {
-    const c = await prisma.stockItem.count();
-    reply = `Tu as ${c} références en stock. Tape "alerte" pour voir celles sous seuil.`;
-  } else if (msg.includes("alerte")) {
-    const items = await prisma.stockItem.findMany({ take: 5 });
-    const low = items.filter((i) => i.quantityKg <= i.thresholdKg);
-    reply = low.length ? `${low.length} produits sous seuil : ${low.map((i) => i.name).join(", ")}` : "Aucune alerte de stock active.";
-  } else if (msg.includes("vente") || msg.includes("ca")) {
-    const agg = await prisma.sale.aggregate({ where: { status: "paid" }, _sum: { amount: true } });
-    reply = `Chiffre d'affaires encaissé : ${(agg._sum.amount ?? 0).toLocaleString()} EUR.`;
-  }
+  const { message, history } = req.body as z.infer<typeof chatSchema>;
+  const snap = await snapshot();
+  const historyText = (history ?? []).map((h) => `${h.role === "user" ? "User" : "Assistant"}: ${h.content}`).join("\n");
+  const prompt = `Contexte entreprise (JSON live) :\n${JSON.stringify(snap)}\n\n${historyText ? `Historique:\n${historyText}\n\n` : ""}Question: ${message}`;
+  const reply = await geminiGenerate(prompt, { system: SYSTEM, temperature: 0.5 });
   res.json({ reply, timestamp: new Date().toISOString() });
+}));
+
+aiRouter.post("/analyze", asyncHandler(async (_req, res) => {
+  const snap = await snapshot();
+  const analysis = await geminiGenerate(
+    `Analyse holistique de l'activité halieutique. Données (JSON) :\n${JSON.stringify(snap)}\n\nProduis :\n1) Tendances clés\n2) Opportunités\n3) Risques\n4) Top 3 actions prioritaires`,
+    { system: SYSTEM },
+  );
+  res.json({ analysis, generatedAt: new Date().toISOString() });
 }));

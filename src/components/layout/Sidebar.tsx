@@ -1,21 +1,45 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
-  FiActivity, FiAnchor, FiBarChart2, FiBox, FiCpu, FiGrid,
-  FiSettings, FiShoppingCart, FiUsers, FiZap,
+  FiActivity, FiAnchor, FiBarChart2, FiBox, FiCpu, FiGrid, FiMap,
+  FiPackage, FiSettings, FiShoppingCart, FiTool, FiTruck, FiUsers, FiZap,
 } from "react-icons/fi";
 import { cn } from "@/lib/utils";
 
-const items = [
-  { to: "/dashboard", label: "Dashboard", icon: FiGrid },
-  { to: "/fishermen", label: "Pêcheurs", icon: FiUsers },
-  { to: "/boats", label: "Bateaux", icon: FiAnchor },
-  { to: "/catches", label: "Captures", icon: FiActivity },
-  { to: "/stock", label: "Stocks", icon: FiBox },
-  { to: "/sales", label: "Ventes", icon: FiShoppingCart },
-  { to: "/analytics", label: "Analytics", icon: FiBarChart2 },
-  { to: "/ai", label: "SmartFish AI", icon: FiCpu },
-  { to: "/settings", label: "Paramètres", icon: FiSettings },
+const groups: Array<{ label?: string; items: Array<{ to: string; label: string; icon: any }> }> = [
+  {
+    items: [
+      { to: "/dashboard", label: "Dashboard", icon: FiGrid },
+      { to: "/ai", label: "SmartFish AI", icon: FiCpu },
+    ],
+  },
+  {
+    label: "Opérations",
+    items: [
+      { to: "/fishermen", label: "Pêcheurs", icon: FiUsers },
+      { to: "/boats", label: "Bateaux", icon: FiAnchor },
+      { to: "/fleet", label: "Maintenance", icon: FiTool },
+      { to: "/catches", label: "Captures", icon: FiActivity },
+      { to: "/map", label: "Carte des zones", icon: FiMap },
+    ],
+  },
+  {
+    label: "Commerce",
+    items: [
+      { to: "/stock", label: "Stocks", icon: FiBox },
+      { to: "/suppliers", label: "Fournisseurs", icon: FiPackage },
+      { to: "/purchases", label: "Achats locaux", icon: FiShoppingCart },
+      { to: "/sales", label: "Ventes", icon: FiShoppingCart },
+      { to: "/exports", label: "Exportations", icon: FiTruck },
+    ],
+  },
+  {
+    label: "Pilotage",
+    items: [
+      { to: "/analytics", label: "Analytics", icon: FiBarChart2 },
+      { to: "/settings", label: "Paramètres", icon: FiSettings },
+    ],
+  },
 ];
 
 export function Sidebar({ open }: { open: boolean }) {
@@ -39,32 +63,41 @@ export function Sidebar({ open }: { open: boolean }) {
         )}
       </div>
 
-      <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-2">
-        {items.map((item) => {
-          const active = pathname === item.to || pathname.startsWith(item.to + "/");
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.to}
-              to={item.to as any}
-              className={cn(
-                "group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-                active
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
-              )}
-            >
-              {active && (
-                <motion.span
-                  layoutId="sidebar-active"
-                  className="absolute left-0 h-6 w-1 rounded-r-full gradient-accent"
-                />
-              )}
-              <Icon className="h-5 w-5 shrink-0" />
-              {open && <span className="truncate">{item.label}</span>}
-            </Link>
-          );
-        })}
+      <nav className="flex-1 space-y-2 overflow-y-auto px-3 py-2">
+        {groups.map((g, gi) => (
+          <div key={gi}>
+            {open && g.label && (
+              <p className="px-3 pb-1 pt-3 text-[10px] font-semibold uppercase tracking-widest text-sidebar-foreground/40">
+                {g.label}
+              </p>
+            )}
+            {g.items.map((item) => {
+              const active = pathname === item.to || pathname.startsWith(item.to + "/");
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to as any}
+                  className={cn(
+                    "group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                    active
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                      : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
+                  )}
+                >
+                  {active && (
+                    <motion.span
+                      layoutId="sidebar-active"
+                      className="absolute left-0 h-6 w-1 rounded-r-full gradient-accent"
+                    />
+                  )}
+                  <Icon className="h-5 w-5 shrink-0" />
+                  {open && <span className="truncate">{item.label}</span>}
+                </Link>
+              );
+            })}
+          </div>
+        ))}
       </nav>
 
       {open && (

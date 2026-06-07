@@ -12,9 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppSuppliersRouteImport } from './routes/_app/suppliers'
 import { Route as AppStockRouteImport } from './routes/_app/stock'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppSalesRouteImport } from './routes/_app/sales'
+import { Route as AppPurchasesRouteImport } from './routes/_app/purchases'
+import { Route as AppMapRouteImport } from './routes/_app/map'
+import { Route as AppFleetRouteImport } from './routes/_app/fleet'
+import { Route as AppExportsRouteImport } from './routes/_app/exports'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 import { Route as AppAnalyticsRouteImport } from './routes/_app/analytics'
 import { Route as AppAiRouteImport } from './routes/_app/ai'
@@ -45,6 +50,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppSuppliersRoute = AppSuppliersRouteImport.update({
+  id: '/suppliers',
+  path: '/suppliers',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppStockRoute = AppStockRouteImport.update({
   id: '/stock',
   path: '/stock',
@@ -58,6 +68,26 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
 const AppSalesRoute = AppSalesRouteImport.update({
   id: '/sales',
   path: '/sales',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPurchasesRoute = AppPurchasesRouteImport.update({
+  id: '/purchases',
+  path: '/purchases',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMapRoute = AppMapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFleetRoute = AppFleetRouteImport.update({
+  id: '/fleet',
+  path: '/fleet',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppExportsRoute = AppExportsRouteImport.update({
+  id: '/exports',
+  path: '/exports',
   getParentRoute: () => AppRoute,
 } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
@@ -142,9 +172,14 @@ export interface FileRoutesByFullPath {
   '/ai': typeof AppAiRoute
   '/analytics': typeof AppAnalyticsRoute
   '/dashboard': typeof AppDashboardRoute
+  '/exports': typeof AppExportsRoute
+  '/fleet': typeof AppFleetRoute
+  '/map': typeof AppMapRoute
+  '/purchases': typeof AppPurchasesRoute
   '/sales': typeof AppSalesRoute
   '/settings': typeof AppSettingsRoute
   '/stock': typeof AppStockRoute
+  '/suppliers': typeof AppSuppliersRoute
   '/boats/new': typeof AppBoatsNewRoute
   '/catches/new': typeof AppCatchesNewRoute
   '/fishermen/new': typeof AppFishermenNewRoute
@@ -164,9 +199,14 @@ export interface FileRoutesByTo {
   '/ai': typeof AppAiRoute
   '/analytics': typeof AppAnalyticsRoute
   '/dashboard': typeof AppDashboardRoute
+  '/exports': typeof AppExportsRoute
+  '/fleet': typeof AppFleetRoute
+  '/map': typeof AppMapRoute
+  '/purchases': typeof AppPurchasesRoute
   '/sales': typeof AppSalesRoute
   '/settings': typeof AppSettingsRoute
   '/stock': typeof AppStockRoute
+  '/suppliers': typeof AppSuppliersRoute
   '/boats/new': typeof AppBoatsNewRoute
   '/catches/new': typeof AppCatchesNewRoute
   '/fishermen/new': typeof AppFishermenNewRoute
@@ -188,9 +228,14 @@ export interface FileRoutesById {
   '/_app/ai': typeof AppAiRoute
   '/_app/analytics': typeof AppAnalyticsRoute
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/exports': typeof AppExportsRoute
+  '/_app/fleet': typeof AppFleetRoute
+  '/_app/map': typeof AppMapRoute
+  '/_app/purchases': typeof AppPurchasesRoute
   '/_app/sales': typeof AppSalesRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/stock': typeof AppStockRoute
+  '/_app/suppliers': typeof AppSuppliersRoute
   '/_app/boats/new': typeof AppBoatsNewRoute
   '/_app/catches/new': typeof AppCatchesNewRoute
   '/_app/fishermen/new': typeof AppFishermenNewRoute
@@ -212,9 +257,14 @@ export interface FileRouteTypes {
     | '/ai'
     | '/analytics'
     | '/dashboard'
+    | '/exports'
+    | '/fleet'
+    | '/map'
+    | '/purchases'
     | '/sales'
     | '/settings'
     | '/stock'
+    | '/suppliers'
     | '/boats/new'
     | '/catches/new'
     | '/fishermen/new'
@@ -234,9 +284,14 @@ export interface FileRouteTypes {
     | '/ai'
     | '/analytics'
     | '/dashboard'
+    | '/exports'
+    | '/fleet'
+    | '/map'
+    | '/purchases'
     | '/sales'
     | '/settings'
     | '/stock'
+    | '/suppliers'
     | '/boats/new'
     | '/catches/new'
     | '/fishermen/new'
@@ -257,9 +312,14 @@ export interface FileRouteTypes {
     | '/_app/ai'
     | '/_app/analytics'
     | '/_app/dashboard'
+    | '/_app/exports'
+    | '/_app/fleet'
+    | '/_app/map'
+    | '/_app/purchases'
     | '/_app/sales'
     | '/_app/settings'
     | '/_app/stock'
+    | '/_app/suppliers'
     | '/_app/boats/new'
     | '/_app/catches/new'
     | '/_app/fishermen/new'
@@ -303,6 +363,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/suppliers': {
+      id: '/_app/suppliers'
+      path: '/suppliers'
+      fullPath: '/suppliers'
+      preLoaderRoute: typeof AppSuppliersRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/stock': {
       id: '/_app/stock'
       path: '/stock'
@@ -322,6 +389,34 @@ declare module '@tanstack/react-router' {
       path: '/sales'
       fullPath: '/sales'
       preLoaderRoute: typeof AppSalesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/purchases': {
+      id: '/_app/purchases'
+      path: '/purchases'
+      fullPath: '/purchases'
+      preLoaderRoute: typeof AppPurchasesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/map': {
+      id: '/_app/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof AppMapRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/fleet': {
+      id: '/_app/fleet'
+      path: '/fleet'
+      fullPath: '/fleet'
+      preLoaderRoute: typeof AppFleetRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/exports': {
+      id: '/_app/exports'
+      path: '/exports'
+      fullPath: '/exports'
+      preLoaderRoute: typeof AppExportsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/dashboard': {
@@ -436,9 +531,14 @@ interface AppRouteChildren {
   AppAiRoute: typeof AppAiRoute
   AppAnalyticsRoute: typeof AppAnalyticsRoute
   AppDashboardRoute: typeof AppDashboardRoute
+  AppExportsRoute: typeof AppExportsRoute
+  AppFleetRoute: typeof AppFleetRoute
+  AppMapRoute: typeof AppMapRoute
+  AppPurchasesRoute: typeof AppPurchasesRoute
   AppSalesRoute: typeof AppSalesRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppStockRoute: typeof AppStockRoute
+  AppSuppliersRoute: typeof AppSuppliersRoute
   AppBoatsNewRoute: typeof AppBoatsNewRoute
   AppCatchesNewRoute: typeof AppCatchesNewRoute
   AppFishermenNewRoute: typeof AppFishermenNewRoute
@@ -457,9 +557,14 @@ const AppRouteChildren: AppRouteChildren = {
   AppAiRoute: AppAiRoute,
   AppAnalyticsRoute: AppAnalyticsRoute,
   AppDashboardRoute: AppDashboardRoute,
+  AppExportsRoute: AppExportsRoute,
+  AppFleetRoute: AppFleetRoute,
+  AppMapRoute: AppMapRoute,
+  AppPurchasesRoute: AppPurchasesRoute,
   AppSalesRoute: AppSalesRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppStockRoute: AppStockRoute,
+  AppSuppliersRoute: AppSuppliersRoute,
   AppBoatsNewRoute: AppBoatsNewRoute,
   AppCatchesNewRoute: AppCatchesNewRoute,
   AppFishermenNewRoute: AppFishermenNewRoute,
@@ -484,13 +589,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
