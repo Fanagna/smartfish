@@ -4,9 +4,11 @@ import { fishermenRouter } from "../modules/fishermen/fishermen.controller";
 import { boatsRouter } from "../modules/boats/boats.controller";
 import { catchesRouter } from "../modules/catches/catches.controller";
 import { stockRouter } from "../modules/stock/stock.controller";
+import { stockIntelligenceRouter } from "../modules/stock/stock.intelligence";
 import { salesRouter } from "../modules/sales/sales.controller";
 import { analyticsRouter } from "../modules/analytics/analytics.controller";
 import { aiRouter } from "../modules/ai/ai.controller";
+import { suppliersRouter, purchasesRouter, exportsRouter, maintenanceRouter } from "../utils/crud";
 
 export const apiRouter = Router();
 
@@ -15,7 +17,12 @@ apiRouter.use("/auth", authRouter);
 apiRouter.use("/fishermen", fishermenRouter);
 apiRouter.use("/boats", boatsRouter);
 apiRouter.use("/catches", catchesRouter);
+apiRouter.use("/stock/intelligence", stockIntelligenceRouter);
 apiRouter.use("/stock", stockRouter);
 apiRouter.use("/sales", salesRouter);
+apiRouter.use("/suppliers", suppliersRouter);
+apiRouter.use("/purchases", purchasesRouter);
+apiRouter.use("/exports", exportsRouter);
+apiRouter.use("/maintenance", maintenanceRouter);
 apiRouter.use("/analytics", analyticsRouter);
 apiRouter.use("/ai", aiRouter);

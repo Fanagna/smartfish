@@ -37,6 +37,20 @@ enum SaleChannel {
   wholesale
 }
 
+enum MaintenanceType {
+  routine
+  repair
+  inspection
+  emergency
+}
+
+enum ExportStatus {
+  preparing
+  shipped
+  delivered
+  cancelled
+}
+
 model User {
   id           String         @id @default(cuid())
   email        String         @unique
@@ -75,16 +89,17 @@ model Fisherman {
 }
 
 model Boat {
-  id                 String      @id @default(cuid())
+  id                 String        @id @default(cuid())
   name               String
-  registrationNumber String      @unique
+  registrationNumber String        @unique
   captain            String?
   capacityKg         Int?
-  status             BoatStatus  @default(available)
+  status             BoatStatus    @default(available)
   fishermen          Fisherman[]
   catches            Catch[]
-  createdAt          DateTime    @default(now())
-  updatedAt          DateTime    @updatedAt
+  maintenances       Maintenance[]
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
 }
 
 model Catch {
@@ -97,6 +112,8 @@ model Catch {
   weightKg    Float
   quantity    Int       @default(0)
   zone        String?
+  lat         Float?
+  lng         Float?
   date        DateTime  @default(now())
   createdAt   DateTime  @default(now())
 
@@ -134,4 +151,65 @@ model Sale {
 
   @@index([status])
   @@index([issuedAt])
+}
+
+model Supplier {
+  id        String     @id @default(cuid())
+  name      String
+  contact   String?
+  phone     String?
+  email     String?
+  region    String?
+  rating    Float      @default(0)
+  purchases Purchase[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Purchase {
+  id         String   @id @default(cuid())
+  supplierId String
+  supplier   Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  species    String
+  quantityKg Float
+  unitPrice  Float
+  total      Float
+  date       DateTime @default(now())
+  notes      String?
+  createdAt  DateTime @default(now())
+
+  @@index([supplierId])
+  @@index([date])
+}
+
+model Export {
+  id          String       @id @default(cuid())
+  reference   String       @unique
+  country     String
+  customer    String
+  product     String
+  quantityKg  Float
+  amount      Float
+  currency    String       @default("EUR")
+  status      ExportStatus @default(preparing)
+  shippedAt   DateTime?
+  deliveredAt DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([status])
+}
+
+model Maintenance {
+  id          String          @id @default(cuid())
+  boatId      String
+  boat        Boat            @relation(fields: [boatId], references: [id], onDelete: Cascade)
+  type        MaintenanceType @default(routine)
+  description String
+  cost        Float           @default(0)
+  performedAt DateTime        @default(now())
+  nextDueAt   DateTime?
+  createdAt   DateTime        @default(now())
+
+  @@index([boatId])
 }
