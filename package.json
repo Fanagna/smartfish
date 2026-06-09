@@ -5,15 +5,16 @@
   "private": true,
   "workspaces": ["frontend", "backend"],
   "scripts": {
-    "dev": "bun run -r dev",
+    "dev": "cd frontend && bun run dev",
+    "dev:all": "bun run --filter '*' dev",
     "dev:frontend": "cd frontend && bun run dev",
     "dev:backend": "cd backend && bun run dev",
-    "build": "bun run -r build",
+    "build": "bun run --filter '*' build",
     "build:frontend": "cd frontend && bun run build",
     "build:backend": "cd backend && bun run build",
-    "lint": "bun run -r lint",
-    "format": "bun run -r format",
-    "type-check": "bun run -r type-check"
+    "lint": "bun run --filter '*' lint",
+    "format": "bun run --filter '*' format",
+    "type-check": "bun run --filter '*' type-check"
   },
   "devDependencies": {}
 }
